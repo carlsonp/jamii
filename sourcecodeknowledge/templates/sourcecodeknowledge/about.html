@@ -1,0 +1,53 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+{% block title %}About{% endblock %}
+
+
+{% block content %}
+<h4>About Jamii</h4>
+
+<p>
+This website provides analysis and information for software developers
+to help understand the source code and communication structure of a project.
+</p>
+
+{% if project == "yourspecificproject" %}
+
+{% else %}
+<p>No additional details about this specific project were found.</p>
+{% endif %}
+
+<br>
+
+<h4>Frequently Asked Questions (FAQ):</h4>
+
+<dl>
+	<dt>Where did the name Jamii come from?</dt>
+	<dd>Jamii means "community" in Swahili.</dd>
+	<br>
+
+	<dt>What software libraries was Jamii built on?</dt>
+	<dd>
+	Some images are from the <a href="http://tango.freedesktop.org/" target="_blank">Tango Desktop Project</a> licensed under the public domain.<br>
+	Built using <a href="http://www.djangoproject.com/" target="_blank">Django</a>, <a href="https://github.com/twitter/typeahead.js" target="_blank">typeahead.js</a>, <a href="http://datatables.net" target="_blank">DataTables</a>, <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>, <a href="http://jquery.com/" target="_blank">jQuery</a>, <a href="http://d3js.org" target="_blank">D3.js</a>, <a href="http://www.jqplot.com/" target="_blank">jqPlot</a>, and <a href="http://www.neo4j.org/" target="_blank">Neo4j</a>.
+	<br>
+	Profile images are pulled from <a href="http://www.gravatar.org">Gravatar.org</a>.
+	</dd>
+	<br>
+
+	<dt>Who's working on this project?</dt>
+	<dd><a href="http://carlsonp.github.io">Patrick Carlson</a> is a PhD candidate in Human-Computer Interaction at Iowa
+	State University doing research on Free and Open Source communities.</dd>
+	<br>
+	
+	<dt>I can't find my name or my name is incorrect.</dt>
+	<dd>My apologies!  Jamii pulls data from multiple sources and some cleaning and formatting is done on the data.  There are
+	bound to be a few issues here and there both on the processing side as well as the data archives themselves.</dd>
+	<br>
+	
+	<dt>Can I help contribute to Jamii?</dt>
+	<dd>Sure!  Please see the <a href="https://github.com/carlsonp/jamii">Jamii Github page</a> for the source code.</dd>
+
+</dl>
+
+{% endblock %}

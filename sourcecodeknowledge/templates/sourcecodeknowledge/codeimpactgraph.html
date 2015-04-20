@@ -1,0 +1,176 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block title %}Source Code Change Impact Graph{% endblock %}
+
+{% block extendhead %}
+<script type="text/javascript" src="{% static 'js/d3/d3-3.4.2.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+	<style>
+	body {
+	  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	  position: relative;
+	  width: 960px;
+	}
+
+	.axis text {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+	.bar {
+	  fill: steelblue;
+	  fill-opacity: .9;
+	}
+
+	.x.axis path {
+	  display: none;
+	}
+
+	label {
+	  position: absolute;
+	  top: 10px;
+	  right: 10px;
+	}
+	</style>
+	
+	<br><br>
+	<p>Most recent 50 parsed commits by structural code impact.</p>
+
+	<br><br>
+
+	<div class="d3graph"></div>
+	<input type="checkbox" /> Sort by code impact
+	<script type="text/javascript">
+		//From the d3.js sortable bar chart example
+		//http://bl.ocks.org/mbostock/3885705
+		var margin = {top: 20, right: 20, bottom: 30, left: 40},
+		width = 960 - margin.left - margin.right,
+		height = 500 - margin.top - margin.bottom;
+
+		var x = d3.scale.ordinal()
+			.rangeRoundBands([0, width], .1, 1);
+
+		var y = d3.scale.linear()
+			.range([height, 0]);
+
+		var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient("bottom");
+
+		var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left");
+
+		var svg = d3.select(".d3graph")
+		  .append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+		  .append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			
+		//var data = [
+			//{date: "7/9/12", impact: 1.508167},
+			//{date: "7/9/13", impact: 4.51492},
+			//{date: "7/9/14", impact: .02780},
+			//{date: "7/9/15", impact: .04253},
+			//{date: "E", impact: .12702},
+			//{date: "F", impact: .02288},
+			//{date: "G", impact: 1.02022},
+			//{date: "H", impact: .06094},
+			//{date: "I", impact: .06973},
+			//{date: "J", impact: .00153},
+			//{date: "K", impact: .00747},
+			//{date: "L", impact: .04025},
+			//{date: "M", impact: .02517},
+			//{date: "N", impact: .06749},
+			//{date: "O", impact: .07507},
+			//{date: "P", impact: .01929},
+			//{date: "Q", impact: 2.00098},
+			//{date: "R", impact: .05987},
+			//{date: "S", impact: .06333},
+			//{date: "T", impact: 1.09056},
+			//];
+			
+		var data = [
+		{% for model in codeimpact %}
+			{ date: "{{model.date}}", datereadable: "{{model.datereadable}}", impact: {{model.delta_impact}} },
+		{% endfor %}
+		];
+
+		function type(d) {
+			d.impact = +d.impact;
+			return d;
+		}
+
+		x.domain(data.map(function(d) { return d.date; }));
+		y.domain([0, d3.max(data, function(d) { return d.impact; })]);
+
+		svg.append("g")
+		  .attr("class", "x axis")
+		  .attr("transform", "translate(0," + height + ")")
+		  .call(xAxis);
+
+		svg.append("g")
+		  .attr("class", "y axis")
+		  .call(yAxis)
+		  .append("text")
+		  .attr("transform", "rotate(-90)")
+		  .attr("x", -height/2)
+		  .attr("y", margin.left)
+		  .style("text-anchor", "middle")
+		  .text("Impact");
+
+		svg.selectAll(".bar")
+		  .data(data)
+		.enter().append("rect")
+		  .attr("class", "bar")
+		  .attr("x", function(d) { return x(d.date); })
+		  .attr("width", x.rangeBand())
+		  .attr("y", function(d) { return y(d.impact); })
+		  .attr("height", function(d) { return height - y(d.impact); });
+
+		d3.select("input").on("change", change);
+
+		var sortTimeout = setTimeout(function() {
+			d3.select("input").each(change);
+		}, 2000);
+
+		function change() {
+			clearTimeout(sortTimeout);
+
+			var x0 = x.domain(data.sort(this.checked
+				? function(a, b) { return b.impact - a.impact; }
+				: function(a, b) { return d3.ascending(a.date, b.date); })
+				.map(function(d) { return d.date; }))
+				.copy();
+
+			var transition = svg.transition().duration(750),
+				delay = function(d, i) { return i * 50; };
+
+			transition.selectAll(".bar")
+				.delay(delay)
+				.attr("x", function(d) { return x0(d.date); });
+
+			transition.select(".x.axis")
+				.call(xAxis)
+			  .selectAll("g")
+				.delay(delay);
+		}
+
+	</script>
+
+	
+
+{% endblock %}

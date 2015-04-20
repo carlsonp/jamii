@@ -1,0 +1,96 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block title %}Jamii{% endblock %}
+
+{% block extendhead %}
+
+{% endblock %}
+
+{% block content %}
+
+<br>
+
+<div class="row">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="text-center">
+				<p style="font-size: large;">Find important commits relevant to you.</p>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="text-center">
+				<p style="font-size: large;">Have a question about a file? Find an expert.</p>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="text-center">
+				<p style="font-size: large;">Find who you may want to email regarding your recent code contributions.</p>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-4">
+			<div class="text-center">
+				<p>This section shows you code commits that have had a
+				substantial impact to the technical dependency structure of the source code.</p>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="text-center">
+				<p>This section allows you to select a source code file
+				to determine who has knowledge or expertise in the file.  This is helpful
+				if you have a question about a particular file or section but are unsure
+				who to contact for help.</p>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="text-center">
+				<p>This section provides suggestions about who
+				you (or other developers) should be increasing communication with
+				on the mailing list based on work on shared source code.</p>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-4">
+			<div class="text-center">
+				<img src="{% static "images/tango/utilities-terminal.png" %}" alt="Impactful Commits" title="Impactful Commits" />
+				<br>
+				<a href="{% url 'sourcecodeknowledge:project' project %}codeimpact/">
+					<button type="button" class="btn btn-default btn-lg">See Important Commits</button>
+				</a>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="text-center">
+				<img src="{% static "images/tango/system-users.png" %}" alt="Developer Knowledge" title="Developer Knowledge" />
+				<br>
+				<a href="{% url 'sourcecodeknowledge:project' project %}expertise/">
+					<button type="button" class="btn btn-default btn-lg">Find Experts</button>
+				</a>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="text-center">
+				<img src="{% static "images/tango/internet-group-chat.png" %}" alt="Communication Suggestions" title="Communication Suggestions" />
+				<br>
+				<a href="{% url 'sourcecodeknowledge:project' project %}developers/letter/A/page/1/">
+					<button type="button" class="btn btn-default btn-lg">See Suggestions</button>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+	<br><hr><br>
+	<center>
+		<p style="font-size: large;">Introductory Video</p>
+		<iframe src="https://player.vimeo.com/video/123356265" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	</center>
+</div>
+
+{% endblock %}

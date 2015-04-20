@@ -1,0 +1,94 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+
+{% block title %}Developers for {{project}}{% endblock %}
+
+{% block congruence %}
+	<li class="active"><a href="{% url 'sourcecodeknowledge:project' project %}developers/letter/A/page/1/">Communication Suggestions</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<script type="text/javascript">
+	function turnPage(page, order, letter)
+	{
+		if (order == "next") {
+			page = page + 1;
+		} else {
+			page = page - 1;
+		}
+		//strip off the letter and page (if it exists)
+		var re = new RegExp(".*(?=letter/)");
+		var url = re.exec(location.href);
+		if (url == undefined) {
+			url = location.href;
+		}
+		url = url + "letter/"+letter+"/page/"+page+"/";
+		window.location.href = url;
+	}
+	</script>
+
+	<h4>Select a developer to see communication suggestions...</h4>
+
+	<a href="{% url 'sourcecodeknowledge:project' project %}searchdevelopers/"><button type="button" class="btn btn-default">Search for Developers</button></a>
+
+	<ul class="pagination">
+		<li {% if letter == "unknown" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='unknown' page='1' %}">Unknown Name </a></li>
+		<li {% if letter == "A" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='A' page='1' %}">A</a></li>
+		<li {% if letter == "B" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='B' page='1' %}">B</a></li>
+		<li {% if letter == "C" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='C' page='1' %}">C</a></li>
+		<li {% if letter == "D" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='D' page='1' %}">D</a></li>
+		<li {% if letter == "E" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='E' page='1' %}">E</a></li>
+		<li {% if letter == "F" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='F' page='1' %}">F</a></li>
+		<li {% if letter == "G" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='G' page='1' %}">G</a></li>
+		<li {% if letter == "H" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='H' page='1' %}">H</a></li>
+		<li {% if letter == "I" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='I' page='1' %}">I</a></li>
+		<li {% if letter == "J" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='J' page='1' %}">J</a></li>
+		<li {% if letter == "K" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='K' page='1' %}">K</a></li>
+		<li {% if letter == "L" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='L' page='1' %}">L</a></li>
+		<li {% if letter == "M" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='M' page='1' %}">M</a></li>
+		<li {% if letter == "N" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='N' page='1' %}">N</a></li>
+		<li {% if letter == "O" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='O' page='1' %}">O</a></li>
+		<li {% if letter == "P" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='P' page='1' %}">P</a></li>
+		<li {% if letter == "Q" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='Q' page='1' %}">Q</a></li>
+		<li {% if letter == "R" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='R' page='1' %}">R</a></li>
+		<li {% if letter == "S" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='S' page='1' %}">S</a></li>
+		<li {% if letter == "T" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='T' page='1' %}">T</a></li>
+		<li {% if letter == "U" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='U' page='1' %}">U</a></li>
+		<li {% if letter == "V" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='V' page='1' %}">V</a></li>
+		<li {% if letter == "W" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='W' page='1' %}">W</a></li>
+		<li {% if letter == "X" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='X' page='1' %}">X</a></li>
+		<li {% if letter == "Y" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='Y' page='1' %}">Y</a></li>
+		<li {% if letter == "Z" %}class="active"{% endif %}><a href="{% url 'sourcecodeknowledge:developers' project=project letter='Z' page='1' %}">Z</a></li>
+	</ul>
+	<br>
+
+	Page: {{page}}
+	<br>
+
+	{% if page != 1  and page != "1" %}
+	<button type="button" class="btn btn-default" onclick="turnPage({{page}}, 'previous', '{{letter}}')">Previous Page</button>
+	{% endif %}
+
+	{% if next_page %}
+	<button type="button" class="btn btn-default" onclick="turnPage({{page}}, 'next', '{{letter}}')">Next Page</button>
+	{% endif %}
+	<br><br>
+
+	<table class="table table-striped table-condensed">
+	<thead><tr><th>Name</th><th>Email</th></tr></thead>
+	{% for developer in developers %}
+		<tr><td><a href="{% url 'sourcecodeknowledge:congruence' project developer.email %}">{{developer.name}}</a></td><td>{{developer.email}}</td></tr>
+	{% endfor %}
+	</table>
+
+	<br>
+	{% if page != 1  and page != "1" %}
+	<button type="button" class="btn btn-default" onclick="turnPage({{page}}, 'previous', '{{letter}}')">Previous Page</button>
+	{% endif %}
+
+	{% if next_page %}
+	<button type="button" class="btn btn-default" onclick="turnPage({{page}}, 'next', '{{letter}}')">Next Page</button>
+	{% endif %}
+
+{% endblock %}

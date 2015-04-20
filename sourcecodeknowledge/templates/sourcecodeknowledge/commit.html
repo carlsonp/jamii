@@ -1,0 +1,70 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block title %}Commit Information{% endblock %}
+
+{% block extendhead %}
+<script type="text/javascript" src="{% static 'js/datatables/js/jquery.dataTables.min.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'js/datatables/css/jquery.dataTables.min.css' %}" />
+
+{% endblock %}
+
+{% block codeimpact %}
+    <li class="active"><a href="{% url 'sourcecodeknowledge:project' project %}codeimpact/">Impactful Commits</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.popover-dismiss').popover({
+			  trigger: 'focus'
+			})
+
+			//setup DataTable
+			$('.table').dataTable( {
+				"paging":   false,
+				"ordering": true,
+				"order": [[ 2, "desc" ]], //order on code impact value descending by default
+				"info":     false,
+				"bFilter":	false
+			} );
+		});
+	</script>
+
+	<h4>Commit Impact Details</h4>
+
+	Commit Hash: {{commit_info.commit_hash}}
+	<br>
+	Date: {{commit_info.date}}
+	<br>
+	Commit Author: <a href="{% url 'sourcecodeknowledge:congruence' project commit_info.author_email %}">{{commit_info.author_developer}} ({{commit_info.author_email}})</a>
+	<br>
+	Commit Message: {{commit_info.logmsg}}
+	<br>
+	<div class="well">
+	<b>Total Impact Score: {{commit_info.delta_impact}} ({{commit_info.delta_impact_msg}})</b>
+	</div>
+	<br>	
+	
+	<h4>10 most impactful files/functions
+	<button type="button" class="btn btn-link popover-dismiss" data-container="body" data-placement="right" data-toggle="popover" title="Code Impact" data-content="These are
+	the files and functions that were most impacted by the technical structural changes of this commit.">(?)</button>
+	</h4>
+	<br>
+	<table class="table table-striped table-condensed">
+	<thead><tr><th>Filename</th><th>Function</th><th>Impact</th></tr></thead>
+	{% for commit_model in code_impact %}
+		{% if commit_model.filename %}
+			<tr><td>{{commit_model.filename}}</td><td></td><td>{{commit_model.code_impact}}</td></tr>
+		{% endif %}
+		{% if commit_model.function %}
+			<tr><td>{{commit_model.functionfilename}}</td><td>{{commit_model.function}}</td><td>{{commit_model.code_impact}}</td></tr>
+		{% endif %}
+	{% endfor %}
+	</table>
+
+{% endblock %}

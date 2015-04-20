@@ -1,0 +1,49 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block title %}Source Code Knowledge{% endblock %}
+
+{% block extendhead %}
+	<style type="text/css">
+		h4 span { font-size:14px; }
+	</style>
+{% endblock %}
+
+{% block expertise %}
+	<li class="active"><a href="{% url 'sourcecodeknowledge:project' project %}expertise/">Developer Knowledge</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<h4>Select a source code file...
+	<span>(
+	{% for ext in extensions %}
+		{{ext}},
+	{% endfor %}...)</span>
+	</h4>
+
+	<br>
+	<a href="{% url 'sourcecodeknowledge:project' project %}expertise/">{{project}}</a> / 
+	{% if subfolders_list and subfolder %}
+		{% for sub in subfolders_list %}
+			{% if sub.folder_link != subfolder %}
+				<a href="{% url 'sourcecodeknowledge:project' project %}expertise/subfolder/{{sub.folder_link}}">{{sub.name}}</a> / 
+			{% else %}
+				{{sub.name}} / 
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	
+	<br><br>
+
+	{% for folder in folders %}
+		<img src="{% static "images/tango/folder.png" %}" alt="folder" /><a href="{% url 'sourcecodeknowledge:project' project %}expertise/subfolder/{{subfolder}}{% if subfolder %}/{% endif %}{{folder}}/">{{folder}}</a><br>
+	{% endfor %}
+
+	{% for file in files %}
+		<img src="{% static "images/tango/file.png" %}" alt="file" /><a href="{% url 'sourcecodeknowledge:project' project %}expertise/file{% if subfolder %}/{% endif %}{{subfolder}}/{{file}}">{{file}}</a><br>
+	{% endfor %}
+
+{% endblock %}

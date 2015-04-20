@@ -1,0 +1,23 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block title %}Communication Suggestions{% endblock %}
+
+{% block congruence %}
+	<li class="active"><a href="{% url 'sourcecodeknowledge:project' project %}communication/">Communication Suggestions</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+<br><br>
+<div class="text-center">
+	<div class="btn-group" role="group" aria-label="...">
+		<a href="{% url 'sourcecodeknowledge:project' project %}developers/"><button type="button" class="btn btn-default">List of Developers</button></a>
+		<a href="{% url 'sourcecodeknowledge:project' project %}searchdevelopers/"><button type="button" class="btn btn-default">Search for Developers</button></a>
+	</div>
+</div>
+
+{% endblock %}

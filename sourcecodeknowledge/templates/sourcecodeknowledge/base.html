@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	{% load staticfiles %}
+	
+    <title>{% block title %}{% endblock %}</title>
+        
+    <script type="text/javascript" src="{% static 'js/jquery/jquery-1.11.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap/bootstrap/bootstrap-3.1.0.min.js' %}"></script>
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'js/bootstrap/bootstrap/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'js/bootstrap/bootstrap/bootstrap-theme.min.css' %}" />
+    
+    <style>
+    a[href]:after{
+		content:"";
+	}
+	html {
+	  position: relative;
+	  min-height: 100%;
+	}
+	body {
+	  /* Margin bottom by footer height */
+	  margin-bottom: 130px;
+	}
+	.footer {
+	  position: absolute;
+	  bottom: 0;
+	  width: 100%;
+	  /* Set the fixed height of the footer here */
+	  height: 100px;
+	}
+	.large-text {
+		font-size: 18px;
+	}
+	/* tab color */
+	.nav-tabs>li>a {
+	  border-color: #777777;
+	  background-color: #F0F0F5;
+	}
+
+	/* active tab color */
+	.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+	  border: 1px solid #777777;
+	}
+
+	/* hover tab color */
+	.nav-tabs>li>a:hover {
+	  border-color: #000000;
+	}
+	
+	/* border color */
+	#wrap {
+		border: 1px #e4e4e4 solid;
+		padding: 20px;
+		border-radius: 4px;
+		box-shadow: 0 0 6px #ccc;
+	}
+	
+	#navbar-centered
+	{
+		position: absolute;
+		width: 100%;
+		left: 0;
+		text-align: center;
+		margin: auto;
+		font-size: xx-large;
+	}
+	#navbar-centered small {
+	  display:block;
+	  font-size: large;
+	}
+    </style>
+    
+    {% block extendhead %}{% endblock %}
+</head>
+
+<body>
+	<div id="wrap" class="container">
+
+	<nav class="navbar navbar-default" role="navigation" style="height: 75px;">
+		<p class="navbar-text" id="navbar-centered">Jamii<small>Source Code and Community Analysis</small></p>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-left">
+				<li><a href="{% url 'sourcecodeknowledge:project' project%}">Home</a></li>
+				<li><a href="{% url 'sourcecodeknowledge:project' project%}about/">About</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav><!-- /.navbar-default -->
+
+	<br>
+	<ul class="nav nav-tabs nav-justified large-text" role="tablist">
+		{% block codeimpact %}
+		<li><a href="{% url 'sourcecodeknowledge:project' project %}codeimpact/">Impactful Commits</a></li>
+		{% endblock %}
+		{% block expertise %}
+		<li><a href="{% url 'sourcecodeknowledge:project' project %}expertise/">Developer Knowledge</a></li>
+		{% endblock %}
+		{% block congruence %}
+		<li><a href="{% url 'sourcecodeknowledge:project' project %}developers/letter/A/page/1/">Communication Suggestions</a></li>
+		{% endblock %}
+	</ul>
+
+	<br>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+	</div> <!-- /.container -->
+
+    <div class="footer">
+		<div class="container">
+		<hr>
+		<small>
+			<p>
+			<a href="https://github.com/carlsonp/jamii" target="_blank">Jamii</a> version: 0.5
+			</p>
+		</small>
+		</div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+{% extends "sourcecodeknowledge/base.html" %}
+
+
+{% load staticfiles %}
+
+{% block title %}Developer Knowledge{% endblock %}
+
+{% block extendhead %}
+	<style type="text/css">
+		{{ css }}
+	</style>
+	<link rel="stylesheet" type="text/css" href="{% static "js/jquery-ui/jquery-ui.min.css" %}" />
+	<script type="text/javascript" src="{% static "js/jquery-ui/jquery-ui.min-1.10.4.js" %}"></script>
+	<script type="text/javascript" src="{% static "js/jqplot/jquery.jqplot.min.js" %}"></script>
+	<script type="text/javascript" src="{% static "js/jqplot/plugins/jqplot.barRenderer.min.js" %}"></script>
+	<script type="text/javascript" src="{% static "js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js" %}"></script>
+	<script type="text/javascript" src="{% static "js/jqplot/plugins/jqplot.pointLabels.min.js" %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static "js/jqplot/jquery.jqplot.min.css" %}" />
+	
+	<style>
+		#feedback { font-size: 1.4em; }
+		#selectable .ui-selecting { background: #FECA40; }
+		#selectable .ui-selected { background: #FECA40; }
+		#selectable { list-style-type: none; margin: 0; padding: 0; }
+		#selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+		.ui-widget-content{ border: 0px; }
+
+		.fa-spin-custom, .glyphicon-spin {
+			-webkit-animation: spin 1000ms infinite linear;
+			animation: spin 1000ms infinite linear;
+		}
+		@-webkit-keyframes spin {
+			0% {
+				-webkit-transform: rotate(0deg);
+				transform: rotate(0deg);
+			}
+			100% {
+				-webkit-transform: rotate(359deg);
+				transform: rotate(359deg);
+			}
+		}
+		@keyframes spin {
+			0% {
+				-webkit-transform: rotate(0deg);
+				transform: rotate(0deg);
+			}
+			100% {
+				-webkit-transform: rotate(359deg);
+				transform: rotate(359deg);
+			}
+		}
+	</style>
+	<script type="text/javascript">
+		$(function() {
+			$("#selectable").selectable({
+				stop: function( event, ui ) {
+					var myLines = [];
+					$('.ui-selected[lineNum]').each(function(index) {
+						myLines[index] = $(this).attr("lineNum");
+					});
+					var max_of_array = myLines.length > 0 ? Math.max.apply(Math, myLines) : "";
+					var min_of_array = myLines.length > 0 ? Math.min.apply(Math, myLines) : "";
+					$("#start").val(min_of_array);
+					$("#end").val(max_of_array);
+				}
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block expertise %}
+	<li class="active"><a href="{% url 'sourcecodeknowledge:project' project %}expertise/">Developer Knowledge</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<br>
+
+	{% if file %}
+		<h4>
+			<a href="{% url 'sourcecodeknowledge:project' project %}expertise/">{{project}}</a>/{{file}} (Language: {{ language }})
+		</h4>
+	{% endif %}
+
+	{% if file %}
+		<form method="post" action="" id="sendlines">{% csrf_token %}
+			<br>
+			Calculate Developer Knowledge For Lines:<br>
+			<input type="text" name="start" id="start" value="{{start}}"> to <input type="text" name="end" id="end" value="{{end}}"><br>
+			<input type="submit" value="Calculate Knowledge" />
+		</form>
+		<br>
+		<div class="loadingicon" style="display:none">
+			<span class="glyphicon glyphicon-refresh glyphicon-spin"></span> Loading...
+		</div>
+		<br>
+		<div id="chart"></div>
+		<br>
+
+			<div class="highlight">
+				<div id="selectable">
+					{{ sourcecode|safe }}
+				</div>
+			</div>
+	{% else %}
+		<p>No file specified.</p>
+	{% endif %}
+
+	<script type="text/javascript">
+		$( "#sendlines" ).submit(function( event ) {
+			$( ".loadingicon" ).show();
+		});
+	</script>
+
+
+	{% if knowledge_model == "NotAvailable" %}
+		<br>
+		<script type="text/javascript">
+			$( "#chart" ).text("No data available for this file.");
+		</script>
+	{% elif knowledge_model %}
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var options = {
+			title: 'Sourcecode Lines: {{start}} - {{end}}'
+			,
+			seriesDefaults: {
+				renderer:$.jqplot.BarRenderer,
+				// Show point labels to the right of each bar.
+				// edgeTolerance of -15 allows labels to flow outside the grid
+				// up to 15 pixels.  If they flow out more than that, they
+				// will be hidden.
+				pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
+				// Rotate the bar shadow as if bar is lit from top right.
+				shadowAngle: 135,
+				// Here's where we tell the chart it is oriented horizontally.
+				rendererOptions: {
+					barDirection: 'horizontal'
+				}
+			},
+			axes: {
+				xaxis: {
+					ticks:[0,100],
+					tickOptions:{formatString:'%d\%'},
+					label: 'Knowledge Percentage',
+				},
+				yaxis: {
+					renderer: $.jqplot.CategoryAxisRenderer,
+				}
+			}
+		};
+		
+		
+		//http://www.jqplot.com/tests/bar-charts.php
+		// For horizontal bar charts, x and y values will be "flipped"
+		// from their vertical bar counterpart.
+		var plot1 = $.jqplot('chart',
+			[
+				{% for developer in knowledge_model %}
+					[[{{developer.knowledge}}, '{{developer.name}}']],
+				{% endfor %}
+			],
+			options
+		);
+		
+		$('#chart').bind('resize', function(event, ui) {
+			plot1.replot( { resetAxes: true } );
+		});
+	});
+	</script>
+	{% endif %}
+
+{% endblock %}
+
