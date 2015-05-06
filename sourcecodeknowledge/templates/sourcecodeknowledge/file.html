@@ -49,6 +49,10 @@
 				transform: rotate(359deg);
 			}
 		}
+
+		.jqplot-point-label {
+			font-size: 14pt;
+		}
 	</style>
 	<script type="text/javascript">
 		$(function() {
@@ -122,8 +126,10 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var options = {
-			title: 'Sourcecode Lines: {{start}} - {{end}}'
-			,
+			title: {
+				text: 'Sourcecode Lines: {{start}} - {{end}}',
+				fontSize: '18pt'
+			},
 			seriesDefaults: {
 				renderer:$.jqplot.BarRenderer,
 				// Show point labels to the right of each bar.
@@ -141,11 +147,20 @@
 			axes: {
 				xaxis: {
 					ticks:[0,100],
-					tickOptions:{formatString:'%d\%'},
+					tickOptions:{
+						formatString: '%d\%',
+						fontSize: '14pt'
+					},
 					label: 'Knowledge Percentage',
+					labelOptions: {
+						fontSize: '14pt'
+					}
 				},
 				yaxis: {
 					renderer: $.jqplot.CategoryAxisRenderer,
+					tickOptions:{
+						fontSize: '14pt'
+					}
 				}
 			}
 		};
